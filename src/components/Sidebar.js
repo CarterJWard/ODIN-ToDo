@@ -1,8 +1,10 @@
 import "../global.css";
-import ProjectList from "../modules/projectsList";
-function Sidebar() {
-  const projects = new ProjectList("First Project");
+import Input from "./Input";
+import SidebarElements from "./SidebarElements";
+
+function Sidebar(projects, reload) {
   const parent = document.createElement("nav");
+  parent.id = "sidebar";
   parent.classList.add("sidebar");
 
   const headingElement = document.createElement("div");
@@ -11,20 +13,24 @@ function Sidebar() {
   headingText.textContent = "Projectly";
   headingElement.appendChild(headingText);
 
-  const menuElements = projects.getAll().map((item) => {
-    const element = document.createElement("div");
-    const text = document.createElement("p");
-    text.textContent = item.getName();
-    element.appendChild(text);
-    return element;
-  });
+  const menuItems = SidebarElements(projects);
+  const input = Input();
 
-  console.log(menuElements);
+  const addButton = document.createElement("button");
+  addButton.textContent = "Create a new project";
+  addButton.onclick = () => {
+    projects.addProject(input.getValue());
+    reload();
+  };
+
+  console.log(input.getValue());
 
   parent.appendChild(headingElement);
-  for (const element of menuElements) {
+  for (const element of menuItems) {
     parent.appendChild(element);
   }
+  parent.appendChild(addButton);
+  parent.appendChild(input.element);
   return parent;
 }
 
