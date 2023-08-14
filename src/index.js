@@ -1,4 +1,4 @@
-import Sidebar from "./components/projectList/Sidebar";
+import Sidebar from "./components/Sidebar";
 import "./global.css";
 function App() {
   const text = document.createElement("h1");
