@@ -13,7 +13,7 @@ function Sidebar(projects, reload) {
   headingText.textContent = "Projectly";
   headingElement.appendChild(headingText);
 
-  const menuItems = SidebarElements(projects);
+  const menuItems = SidebarElements(projects, reload);
   const input = Input();
 
   const addButton = document.createElement("button");
@@ -22,8 +22,6 @@ function Sidebar(projects, reload) {
     projects.addProject(input.getValue());
     reload();
   };
-
-  console.log(input.getValue());
 
   parent.appendChild(headingElement);
   for (const element of menuItems) {

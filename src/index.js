@@ -17,7 +17,7 @@ function App() {
   }
   function draw() {
     document.body.appendChild(Sidebar(projects, reload));
-    document.body.appendChild(ProjectView(projects));
+    document.body.appendChild(ProjectView(projects, reload));
   }
   draw();
 }

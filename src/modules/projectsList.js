@@ -20,5 +20,8 @@ class ProjectList {
     );
     return selected[0];
   }
+  setSelectedProject(id) {
+    this._selectedID = id;
+  }
 }
 export default ProjectList;

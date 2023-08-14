@@ -16,5 +16,8 @@ class Project {
   getTasks() {
     return this._tasks;
   }
+  getID() {
+    return this._id;
+  }
 }
 export default Project;
