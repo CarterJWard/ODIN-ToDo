@@ -3,6 +3,7 @@ class ProjectList {
   constructor(name) {
     this._projects = [];
     this._currentID = 1;
+    this._selectedID = 1;
     this.addProject(name);
   }
   addProject(title) {
@@ -13,8 +14,10 @@ class ProjectList {
   getAll() {
     return this._projects;
   }
-  getSelectedProject(id) {
-    const selected = this._projects.filter((project) => project._id == id);
+  getSelectedProject() {
+    const selected = this._projects.filter(
+      (project) => project._id == this._selectedID
+    );
     return selected[0];
   }
 }

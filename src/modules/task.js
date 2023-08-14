@@ -1,4 +1,4 @@
-class Item {
+class Task {
   constructor(name) {
     this._name = name;
   }
@@ -6,3 +6,5 @@ class Item {
     return this._name;
   }
 }
+
+export default Task;
