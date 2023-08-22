@@ -7,6 +7,7 @@ function App() {
   //Setup some basic starting data
   const projects = new ProjectList("First Project");
   projects.getSelectedProject().addTask("First Task");
+  projects.getSelectedProject().getTasks()[0].setDescription("My first task");
 
   const text = document.createElement("h1");
   text.textContent = "To Do Application";
