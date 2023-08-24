@@ -24,6 +24,9 @@ class Task {
   getDue() {
     return this._dueDate;
   }
+  getCompleted() {
+    return this._completed;
+  }
 }
 
 export default Task;

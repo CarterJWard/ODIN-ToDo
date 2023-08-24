@@ -27,8 +27,8 @@ function Sidebar(projects, reload) {
   for (const element of menuItems) {
     parent.appendChild(element);
   }
-  parent.appendChild(addButton);
   parent.appendChild(input.element);
+  parent.appendChild(addButton);
   return parent;
 }
 

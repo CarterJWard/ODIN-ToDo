@@ -1,6 +1,7 @@
 function Input() {
   const parent = document.createElement("div");
   const input = document.createElement("input");
+  input.placeholder = "New Project";
 
   parent.appendChild(input);
   function getValue() {

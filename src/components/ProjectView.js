@@ -5,7 +5,7 @@ function ProjectView(projects, reload) {
   const title = document.createElement("h1");
   title.textContent = selectedProject.getName();
 
-  const taskList = TaskList(selectedProject.getTasks());
+  const taskList = TaskList(selectedProject.getTasks(), reload);
   const input = document.createElement("input");
   input.placeholder = "task name";
   const addTaskButton = document.createElement("button");
