@@ -31,8 +31,15 @@ function TaskList(tasks, reload) {
     description.placeholder = "Add Description";
     description.onchange = () => task.setDescription(description.value);
 
-    const time = document.createElement("p");
-    time.textContent = task.getDue();
+    const due = document.createElement("p");
+    due.textContent = task.getDue();
+
+    const setButton = document.createElement("button");
+    setButton.textContent = "set time";
+    setButton.onclick = () => {
+      task.setDueTime(5, 30);
+      reload();
+    };
 
     const c1 = document.createElement("td");
     c1.appendChild(completed);
@@ -44,12 +51,16 @@ function TaskList(tasks, reload) {
     c3.appendChild(description);
 
     const c4 = document.createElement("td");
-    c4.appendChild(time);
+    c4.appendChild(due);
+
+    const c5 = document.createElement("td");
+    c5.appendChild(setButton);
 
     row.appendChild(c1);
     row.appendChild(c2);
     row.appendChild(c3);
     row.appendChild(c4);
+    row.appendChild(c5);
 
     return row;
   });
