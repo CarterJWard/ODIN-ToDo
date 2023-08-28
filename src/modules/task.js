@@ -1,4 +1,4 @@
-import { format, setHours, setMinutes } from "date-fns";
+import { format, setHours, setMinutes, getDaysInMonth } from "date-fns";
 class Task {
   constructor(name) {
     this._name = name;
@@ -39,6 +39,12 @@ class Task {
   }
   getCompleted() {
     return this._completed;
+  }
+  getDueMonth() {
+    return format(this._dueDate, "MMMM");
+  }
+  getNumberOfDays() {
+    return getDaysInMonth(this._dueDate);
   }
 }
 

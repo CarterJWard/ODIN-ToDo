@@ -12,3 +12,11 @@ body {
 .completed {
   color: green;
 }
+
+.disabled {
+  display: none;
+}
+
+.enabled {
+  display: block;
+}

@@ -1,3 +1,4 @@
+import CalendarSelection from "./CalendarSelection";
 import TaskTable from "./TaskTable";
 function TaskList(tasks, reload) {
   const parent = document.createElement("div");
@@ -7,6 +8,7 @@ function TaskList(tasks, reload) {
 
     const completed = document.createElement("input");
     completed.type = "checkbox";
+
     function changeHandler() {
       if (completed.checked) {
         task.complete();
@@ -69,8 +71,16 @@ function TaskList(tasks, reload) {
   for (const task of formattedTasks) {
     table.appendChild(task);
   }
+
+  const calendar = new CalendarSelection(tasks[0]);
+  const testButton = document.createElement("button");
+  testButton.textContent = "button";
+  testButton.onclick = calendar.switchCalendar;
   parent.appendChild(table);
-  return table;
+  parent.appendChild(calendar.getElement());
+  parent.appendChild(testButton);
+
+  return parent;
 }
 
 export default TaskList;
