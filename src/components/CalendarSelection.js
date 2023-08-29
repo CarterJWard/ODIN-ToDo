@@ -13,15 +13,46 @@ class CalendarSelection {
     function createTable() {
       const tableElement = document.createElement("table");
       const headingRow = document.createElement("tr");
-      const days = ["M", "T", "W", "Thu", "F", "S", "Sun"];
+      const days = ["S", "M", "T", "W", "T", "F", "S"];
       for (const day of days) {
         const header = document.createElement("th");
         header.textContent = day;
         headingRow.appendChild(header);
       }
 
-      console.log(task.getNumberOfDays());
+      let count = 1;
+      let cellPos = 1;
+      let offset = task.getFirstDay();
+      let row = document.createElement("tr");
+      let rows = [];
+
+      while (count <= task.getNumberOfDays()) {
+        console.log(count);
+
+        const item = document.createElement("td");
+        if (offset > 0) {
+          offset--;
+          item.textContent = "";
+        } else {
+          item.textContent = count;
+          count++; //counter on increases once the offset has been reached
+        }
+
+        cellPos++;
+        row.appendChild(item);
+
+        if (cellPos >= 8) {
+          rows.push(row);
+          row = document.createElement("tr");
+          cellPos = 1;
+          console.log("reset ", count);
+        }
+      }
+      rows.push(row);
       tableElement.appendChild(headingRow);
+      for (const row of rows) {
+        tableElement.appendChild(row);
+      }
       return tableElement;
     }
     const table = createTable();
