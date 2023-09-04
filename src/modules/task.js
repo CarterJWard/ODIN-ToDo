@@ -53,17 +53,6 @@ class Task {
   getDueMonth() {
     return format(this._dueDate, "MMMM");
   }
-  getNumberOfDays() {
-    return getDaysInMonth(this._dueDate);
-  }
-  getFirstDay() {
-    const firstDay = new Date(
-      this._dueDate.getFullYear(),
-      this._dueDate.getMonth(),
-      1
-    );
-    return getDay(firstDay);
-  }
   getDueDayOfMonth() {
     return getDate(this._dueDate);
   }

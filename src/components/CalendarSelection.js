@@ -1,32 +1,41 @@
-import { getDaysInMonth, getDay } from "date-fns";
+import { getDaysInMonth, getDay, format } from "date-fns";
 
 class CalendarSelection {
   constructor(task) {
     this._shown = false;
+    this._task = task;
     this._currentTask = task;
-    this._currentMonth = new currentMonth(
+    this._currentSelectedDate = this._task.getRawDue();
+    this._shownMonth = new currentMonth(
       task,
       task.getRawDue().getFullYear(),
       task.getRawDue().getMonth()
     );
 
-    this._shownMonth = this._parent = document.createElement("div");
+    this._parent = document.createElement("div");
     this._heading = document.createElement("h1");
-    this._heading.textContent = task.getDueMonth();
     this._parent.appendChild(this._heading);
     this._parent.classList.add("disabled");
     this._parent.id = "calendar";
 
     const last = document.createElement("button");
     last.textContent = "Last Month";
+    last.onclick = () => {
+      this._shownMonth.prevMonth();
+      this.redraw();
+    };
 
     const next = document.createElement("button");
     next.textContent = "Next Month";
-
-    const table = createTable(task, this._currentMonth);
+    next.onclick = () => {
+      this._shownMonth.nextMonth();
+      this.redraw();
+    };
+    this._table = createTable(this._task, this._shownMonth);
     this._parent.appendChild(last);
     this._parent.appendChild(next);
-    this._parent.appendChild(table);
+    this._parent.appendChild(this._table);
+    this.redraw();
   }
 
   switchCalendar() {
@@ -44,14 +53,53 @@ class CalendarSelection {
   getElement() {
     return this._parent;
   }
-  setCalendarMonth() {}
+
+  setCalendarMonth() {
+    this.redraw();
+  }
+  redraw() {
+    this._heading.textContent = this._shownMonth.monthTitle;
+    this._parent.removeChild(this._table);
+    this._table = createTable(this._task, this._shownMonth);
+    this._parent.appendChild(this._table);
+  }
 }
 
 class currentMonth {
   constructor(task, year, month) {
-    const newMonth = new Date(year, month, 1);
-    this.offset = getDay(newMonth);
-    this.numDays = getDaysInMonth(newMonth);
+    this.newMonth = new Date(year, month, 1);
+    this.month = month;
+    this.year = year;
+    this.offset;
+    this.numDays;
+    this.monthTitle;
+    this.refreshVars();
+  }
+  prevMonth() {
+    this.month--;
+    if (this.month == 11) {
+      newMonth = 0;
+      this.year++;
+    } else if (this.month == -1) {
+      this.month = 11;
+      this.year--;
+    }
+    this.newMonth = new Date(this.year, this.month, 1);
+    this.refreshVars();
+  }
+  nextMonth() {
+    this.month++;
+    if (this.month == 12) {
+      this.month = 0;
+      this.year++;
+    }
+    this.newMonth = new Date(this.year, this.month, 1);
+    this.refreshVars();
+  }
+  refreshVars() {
+    this.offset = getDay(this.newMonth);
+    this.numDays = getDaysInMonth(this.newMonth);
+    this.monthTitle = format(this.newMonth, "MMMM");
   }
 }
 
@@ -60,6 +108,7 @@ function createTable(task, month) {
   const headingRow = document.createElement("tr");
   const selectedDay = task.getDueDayOfMonth();
   const days = ["S", "M", "T", "W", "T", "F", "S"];
+  console.log("redrawn");
 
   for (const day of days) {
     const header = document.createElement("th");
@@ -70,11 +119,8 @@ function createTable(task, month) {
   let count = 1;
   let cellPos = 1;
   let row = document.createElement("tr");
-  let rows = [];
-  console.log(month.numDays);
 
   while (count <= month.numDays) {
-    console.log(month.offset);
     const item = document.createElement("td");
     if (count == selectedDay) {
       item.id = "selectedDay";
@@ -95,14 +141,6 @@ function createTable(task, month) {
       cellPos = 1;
     }
   }
-  /*
-  rows.push(row);
-  tableElement.appendChild(headingRow);
-  for (const row of rows) {
-    tableElement.appendChild(row);
-  }
-  */
-
   return tableElement;
 }
 
