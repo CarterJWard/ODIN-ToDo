@@ -20,3 +20,7 @@ body {
 .enabled {
   display: block;
 }
+
+#selectedDay {
+  color: red;
+}

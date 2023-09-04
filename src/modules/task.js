@@ -1,4 +1,11 @@
-import { format, setHours, setMinutes, getDaysInMonth, getDay } from "date-fns";
+import {
+  format,
+  setHours,
+  setMinutes,
+  getDaysInMonth,
+  getDay,
+  getDate,
+} from "date-fns";
 class Task {
   constructor(name) {
     this._name = name;
@@ -22,6 +29,9 @@ class Task {
   }
   unComplete() {
     this._completed = false;
+  }
+  getRawDue() {
+    return this._dueDate;
   }
   getDue() {
     let formattedDate = `${format(this._dueDate, "P")}`;
@@ -52,22 +62,11 @@ class Task {
       this._dueDate.getMonth(),
       1
     );
-    console.log(firstDay);
     return getDay(firstDay);
   }
-
-  /*
-
-// Suppose this is your existing date
-const existingDate = new Date(2023, 5, 15);  // June 15, 2023
-
-// Create a new date for the first day of the existing date's month
-const firstOfMonth = new Date(existingDate.getFullYear(), existingDate.getMonth(), 1);
-
-const dayOfWeek = format(firstOfMonth, 'EEEE');
-
-console.log(dayOfWeek);  // Outputs: "Thursday" for June 1, 2023
-*/
+  getDueDayOfMonth() {
+    return getDate(this._dueDate);
+  }
 }
 
 export default Task;
