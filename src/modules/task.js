@@ -56,6 +56,12 @@ class Task {
   getDueDayOfMonth() {
     return getDate(this._dueDate);
   }
+  hasTime() {
+    return this._hasTime;
+  }
+  setTimeShown(value) {
+    this._hasTime = value;
+  }
 }
 
 export default Task;

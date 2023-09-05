@@ -1,4 +1,39 @@
 import { getDaysInMonth, getDay, format } from "date-fns";
+function timeSlider(task) {
+  const parent = document.createElement("div");
+  const timeSlider = document.createElement("input");
+  timeSlider.type = "checkbox";
+  timeSlider.checked = task.hasTime();
+  timeSlider.addEventListener("click", () => {
+    task.setTimeShown(timeSlider.checked);
+    const timeSelection = document.querySelector("#timeSelector");
+    timeSlider.checked
+      ? timeSelection.classList.remove("disabled")
+      : timeSelection.classList.add("disabled");
+  });
+  parent.appendChild(timeSlider);
+  return parent;
+}
+
+function nextButton(shownMonth, redraw) {
+  const button = document.createElement("button");
+  button.textContent = "Next Month";
+  button.onclick = () => {
+    shownMonth.nextMonth();
+    redraw();
+  };
+  return button;
+}
+
+function prevButton(shownMonth, redraw) {
+  const button = document.createElement("button");
+  button.textContent = "Last Month";
+  button.onclick = () => {
+    shownMonth.prevMonth();
+    redraw();
+  };
+  return button;
+}
 
 class CalendarSelection {
   constructor(task) {
@@ -6,7 +41,7 @@ class CalendarSelection {
     this._task = task;
     this._currentTask = task;
     this._currentSelectedDate = this._task.getRawDue();
-    this._shownMonth = new currentMonth(
+    this.shownMonth = new currentMonth(
       task,
       task.getRawDue().getFullYear(),
       task.getRawDue().getMonth()
@@ -18,22 +53,16 @@ class CalendarSelection {
     this._parent.classList.add("disabled");
     this._parent.id = "calendar";
 
-    const last = document.createElement("button");
-    last.textContent = "Last Month";
-    last.onclick = () => {
-      this._shownMonth.prevMonth();
-      this.redraw();
-    };
+    const prevButtonElement = prevButton(this._shownMonth, this.redraw);
+    const nextButtonElement = nextButton(this.shownMonth, this.redraw);
+    const timeSliderElement = timeSlider(this._task);
+    const timeSelector = this.createTime(this._task.hasTime());
 
-    const next = document.createElement("button");
-    next.textContent = "Next Month";
-    next.onclick = () => {
-      this._shownMonth.nextMonth();
-      this.redraw();
-    };
-    this._table = createTable(this._task, this._shownMonth);
-    this._parent.appendChild(last);
-    this._parent.appendChild(next);
+    this._table = createTable(this._task, this.shownMonth);
+    this._parent.appendChild(prevButtonElement);
+    this._parent.appendChild(nextButtonElement);
+    this._parent.appendChild(timeSliderElement);
+    this._parent.appendChild(timeSelector);
     this._parent.appendChild(this._table);
     this.redraw();
   }
@@ -57,11 +86,28 @@ class CalendarSelection {
   setCalendarMonth() {
     this.redraw();
   }
+
   redraw() {
-    this._heading.textContent = this._shownMonth.monthTitle;
+    this._heading.textContent = this.shownMonth.monthTitle;
     this._parent.removeChild(this._table);
-    this._table = createTable(this._task, this._shownMonth);
+    this._table = createTable(this._task, this.shownMonth);
     this._parent.appendChild(this._table);
+  }
+
+  createTime(shown) {
+    const parent = document.createElement("div");
+    parent.id = "timeSelector";
+    if (shown) {
+    } else {
+      parent.classList.add("disabled");
+    }
+
+    const hourInput = document.createElement("input");
+    const minInput = document.createElement("input");
+
+    parent.appendChild(hourInput);
+    parent.appendChild(minInput);
+    return parent;
   }
 }
 
@@ -108,7 +154,6 @@ function createTable(task, month) {
   const headingRow = document.createElement("tr");
   const selectedDay = task.getDueDayOfMonth();
   const days = ["S", "M", "T", "W", "T", "F", "S"];
-  console.log("redrawn");
 
   for (const day of days) {
     const header = document.createElement("th");
