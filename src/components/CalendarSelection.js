@@ -4,33 +4,97 @@ function timeSlider(task) {
   const timeSlider = document.createElement("input");
   timeSlider.type = "checkbox";
   timeSlider.checked = task.hasTime();
+  timeSlider.name = "showTime";
   timeSlider.addEventListener("click", () => {
     task.setTimeShown(timeSlider.checked);
     const timeSelection = document.querySelector("#timeSelector");
     timeSlider.checked
       ? timeSelection.classList.remove("disabled")
       : timeSelection.classList.add("disabled");
+    task.reloadTime();
   });
+  const label = document.createElement("label");
+  label.for = "showTime";
+  label.textContent = "Has time";
   parent.appendChild(timeSlider);
+  parent.appendChild(label);
+  return parent;
+}
+function createTime(shown, task) {
+  let isPM = false;
+  const parent = document.createElement("div");
+  parent.id = "timeSelector";
+  if (shown) {
+  } else {
+    parent.classList.add("disabled");
+  }
+
+  const hourInput = document.createElement("input");
+  hourInput.type = "number";
+  hourInput.max = 12;
+  hourInput.min = 0;
+  hourInput.placeholder = "hour";
+  hourInput.value = task.getHours() % 12;
+
+  const minInput = document.createElement("input");
+  minInput.type = "number";
+  minInput.max = 59;
+  minInput.min = 0;
+  minInput.placeholder = "Minute";
+  minInput.value = task.getMinutes();
+
+  hourInput.addEventListener("blur", () => {
+    let hour = hourInput.value;
+    if (amPMCheck.checked >= 0 && hour <= 12) {
+      if (isPM) {
+        hour += 12;
+      }
+      task.setHours(hour);
+    } else {
+      hourInput.value = task.getHours();
+    }
+  });
+
+  minInput.addEventListener("blur", () => {
+    if (minInput.value >= 0 && minInput.value <= 59) {
+      task.setMinutes(minInput.value);
+    }
+    minInput.value = task.getMinutes();
+    console.log(task);
+  });
+
+  const amPMCheck = document.createElement("input");
+  amPMCheck.type = "checkbox";
+  amPMCheck.name = "amPMCheck";
+  amPMCheck.checked = task.getHours() > 12;
+
+  const checkLabel = document.createElement("label");
+  checkLabel.for = "amPmCheck";
+  checkLabel.textContent = "AM - PM";
+
+  parent.appendChild(hourInput);
+  parent.appendChild(minInput);
+  parent.appendChild(amPMCheck);
+  parent.appendChild(checkLabel);
   return parent;
 }
 
-function nextButton(shownMonth, redraw) {
+function nextButton(shownMonth, item) {
   const button = document.createElement("button");
   button.textContent = "Next Month";
   button.onclick = () => {
     shownMonth.nextMonth();
-    redraw();
+    item.redraw();
   };
   return button;
 }
 
-function prevButton(shownMonth, redraw) {
+function prevButton(shownMonth, item) {
   const button = document.createElement("button");
   button.textContent = "Last Month";
   button.onclick = () => {
     shownMonth.prevMonth();
-    redraw();
+    item.redraw();
   };
   return button;
 }
@@ -42,7 +106,6 @@ class CalendarSelection {
     this._currentTask = task;
     this._currentSelectedDate = this._task.getRawDue();
     this.shownMonth = new currentMonth(
-      task,
       task.getRawDue().getFullYear(),
       task.getRawDue().getMonth()
     );
@@ -53,10 +116,10 @@ class CalendarSelection {
     this._parent.classList.add("disabled");
     this._parent.id = "calendar";
 
-    const prevButtonElement = prevButton(this._shownMonth, this.redraw);
-    const nextButtonElement = nextButton(this.shownMonth, this.redraw);
+    const prevButtonElement = prevButton(this.shownMonth, this);
+    const nextButtonElement = nextButton(this.shownMonth, this);
     const timeSliderElement = timeSlider(this._task);
-    const timeSelector = this.createTime(this._task.hasTime());
+    const timeSelector = createTime(this._task.hasTime(), this._task);
 
     this._table = createTable(this._task, this.shownMonth);
     this._parent.appendChild(prevButtonElement);
@@ -93,26 +156,10 @@ class CalendarSelection {
     this._table = createTable(this._task, this.shownMonth);
     this._parent.appendChild(this._table);
   }
-
-  createTime(shown) {
-    const parent = document.createElement("div");
-    parent.id = "timeSelector";
-    if (shown) {
-    } else {
-      parent.classList.add("disabled");
-    }
-
-    const hourInput = document.createElement("input");
-    const minInput = document.createElement("input");
-
-    parent.appendChild(hourInput);
-    parent.appendChild(minInput);
-    return parent;
-  }
 }
 
 class currentMonth {
-  constructor(task, year, month) {
+  constructor(year, month) {
     this.newMonth = new Date(year, month, 1);
     this.month = month;
     this.year = year;
@@ -167,7 +214,7 @@ function createTable(task, month) {
 
   while (count <= month.numDays) {
     const item = document.createElement("td");
-    if (count == selectedDay) {
+    if (month.month == task.getRawDue().getMonth() && count == selectedDay) {
       item.id = "selectedDay";
     }
     if (month.offset > 0) {

@@ -1,11 +1,4 @@
-import {
-  format,
-  setHours,
-  setMinutes,
-  getDaysInMonth,
-  getDay,
-  getDate,
-} from "date-fns";
+import { format, setHours, setMinutes, getDate } from "date-fns";
 class Task {
   constructor(name) {
     this._name = name;
@@ -14,6 +7,7 @@ class Task {
     this._priority;
     this._completed = false;
     this._hasTime = false;
+    this._reloadFunc;
   }
   getName() {
     return this._name;
@@ -38,7 +32,6 @@ class Task {
     if (this._hasTime) {
       formattedDate += ` ${format(this._dueDate, "p")}`;
     }
-
     return formattedDate;
   }
   setDueTime(hours, minutes) {
@@ -46,6 +39,13 @@ class Task {
     const hoursFormat = setHours(this._dueDate, hours);
     const minutesFormat = setMinutes(hoursFormat, minutes);
     this._dueDate = minutesFormat;
+  }
+  setHours(hours) {
+    this._dueDate = setHours(this._dueDate, hours);
+    console.log(this._dueDate);
+  }
+  setMinutes(minutes) {
+    this._dueDate = setMinutes(this._dueDate, minutes);
   }
   getCompleted() {
     return this._completed;
@@ -61,6 +61,18 @@ class Task {
   }
   setTimeShown(value) {
     this._hasTime = value;
+  }
+  getHours() {
+    return this._dueDate.getHours();
+  }
+  getMinutes() {
+    return this._dueDate.getMinutes();
+  }
+  setReloadTimeFunc(func) {
+    this._reloadFunc = func;
+  }
+  reloadTime() {
+    this._reloadFunc();
   }
 }
 
