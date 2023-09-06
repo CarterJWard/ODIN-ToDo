@@ -43,8 +43,7 @@ function TaskList(tasks, reload) {
     const setButton = document.createElement("button");
     setButton.textContent = "set time";
     setButton.onclick = () => {
-      task.setDueTime(5, 30);
-      reload();
+      calendar.switchCalendar();
     };
 
     const c1 = document.createElement("td");
@@ -78,11 +77,8 @@ function TaskList(tasks, reload) {
 
   const calendar = new CalendarSelection(tasks[0]);
   const testButton = document.createElement("button");
-  testButton.textContent = "Shown Calendar";
-  testButton.onclick = calendar.switchCalendar;
   parent.appendChild(table);
   parent.appendChild(calendar.getElement());
-  parent.appendChild(testButton);
 
   return parent;
 }

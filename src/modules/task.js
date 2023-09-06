@@ -34,12 +34,7 @@ class Task {
     }
     return formattedDate;
   }
-  setDueTime(hours, minutes) {
-    this._hasTime = true;
-    const hoursFormat = setHours(this._dueDate, hours);
-    const minutesFormat = setMinutes(hoursFormat, minutes);
-    this._dueDate = minutesFormat;
-  }
+
   setHours(hours) {
     this._dueDate = setHours(this._dueDate, hours);
     console.log(this._dueDate);

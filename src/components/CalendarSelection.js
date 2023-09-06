@@ -53,6 +53,7 @@ function createTime(shown, task) {
     } else {
       hourInput.value = task.getHours();
     }
+    task.reloadTime();
   });
 
   minInput.addEventListener("blur", () => {
@@ -60,13 +61,22 @@ function createTime(shown, task) {
       task.setMinutes(minInput.value);
     }
     minInput.value = task.getMinutes();
-    console.log(task);
+    task.reloadTime();
   });
 
   const amPMCheck = document.createElement("input");
   amPMCheck.type = "checkbox";
   amPMCheck.name = "amPMCheck";
   amPMCheck.checked = task.getHours() > 12;
+  amPMCheck.addEventListener("click", () => {
+    console.log(task.getHours());
+    if (amPMCheck.checked) {
+      task.setHours(task.getHours() + 12);
+    } else {
+      task.setHours(task.getHours() - 12);
+    }
+    task.reloadTime();
+  });
 
   const checkLabel = document.createElement("label");
   checkLabel.for = "amPmCheck";
@@ -103,7 +113,6 @@ class CalendarSelection {
   constructor(task) {
     this._shown = false;
     this._task = task;
-    this._currentTask = task;
     this._currentSelectedDate = this._task.getRawDue();
     this.shownMonth = new currentMonth(
       task.getRawDue().getFullYear(),
@@ -130,8 +139,9 @@ class CalendarSelection {
     this.redraw();
   }
 
-  switchCalendar() {
+  switchCalendar(task) {
     const parent = document.getElementById("calendar");
+    this._task = task;
     if (this._shown) {
       parent.classList.add("disabled");
       parent.classList.remove("enabled");
