@@ -42,10 +42,10 @@ function TaskList(tasks, reload) {
 
     const setButton = document.createElement("button");
     setButton.textContent = "set time";
-    setButton.onclick = () => {
-      calendar.switchCalendar();
-    };
-
+    setButton.addEventListener("click", (event) => {
+      calendar.switchCalendar(task);
+      calendar.setPos(event.clientX, event.clientY);
+    });
     const c1 = document.createElement("td");
     c1.appendChild(completed);
 
@@ -78,7 +78,10 @@ function TaskList(tasks, reload) {
   const calendar = new CalendarSelection(tasks[0]);
   const testButton = document.createElement("button");
   parent.appendChild(table);
-  parent.appendChild(calendar.getElement());
+  console.log(calendar);
+  if (calendar) {
+    parent.appendChild(calendar.getElement());
+  }
 
   return parent;
 }

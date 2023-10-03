@@ -1,4 +1,11 @@
-import { format, setHours, setMinutes, getDate } from "date-fns";
+import {
+  format,
+  setHours,
+  setMinutes,
+  getDate,
+  setDate,
+  setMonth,
+} from "date-fns";
 class Task {
   constructor(name) {
     this._name = name;
@@ -66,8 +73,12 @@ class Task {
   setReloadTimeFunc(func) {
     this._reloadFunc = func;
   }
-  reloadTime() {
+  reloadDate() {
     this._reloadFunc();
+  }
+  setNewDay(month, day) {
+    this._dueDate = setDate(this._dueDate, day);
+    this._dueDate = setMonth(this._dueDate, month);
   }
 }
 
