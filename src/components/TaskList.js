@@ -76,9 +76,7 @@ function TaskList(tasks, reload) {
   }
 
   const calendar = new CalendarSelection(tasks[0]);
-  const testButton = document.createElement("button");
   parent.appendChild(table);
-  console.log(calendar);
   if (calendar) {
     parent.appendChild(calendar.getElement());
   }

@@ -104,33 +104,31 @@ class CalendarSelection {
     if (!task) {
       return;
     }
-    function handleClick(event) {
-      console.log(this._parent);
-      /*
-      if (this._parent.contains(event.target)) {
-        //calendar action
-      } else {
-        this.switchCalendar(this._task);
-      */
-    }
-
     const parent = document.getElementById("calendar");
+    function handleClick(event) {
+      console.log(parent);
+      console.log(event.target);
+    }
+    console.log(parent);
     this._task = task;
     this._currentSelectedDate = this._task.getRawDue();
     this.shownMonth = new currentMonth(
       this._task.getRawDue().getFullYear(),
       this._task.getRawDue().getMonth()
     );
+    console.log("showing time");
     if (this._shown) {
       parent.classList.add("disabled");
       parent.classList.remove("enabled");
       this._shown = false;
       document.removeEventListener("click", handleClick);
+      console.log("no longer showing");
     } else {
       parent.classList.remove("disabled");
       parent.classList.add("enabled");
       this._shown = true;
       document.addEventListener("click", handleClick);
+      console.log("now showing");
     }
     this.redraw();
   }
